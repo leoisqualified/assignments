@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const reportSchema = new mongoose.Schema(
   {
     classroomId: {
@@ -10,11 +12,33 @@ const reportSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    assignmentsGrades: [Number], // Array of grades for assignments
-    quizScores: [Number], // Array of quiz scores
+    assignmentsGrades: [
+      {
+        assignmentId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Assignment",
+        },
+        grade: Number,
+      },
+    ],
+    quizScores: [
+      {
+        quizId: { type: mongoose.Schema.Types.ObjectId, ref: "Quiz" },
+        score: Number,
+      },
+    ],
     finalGrade: Number, // Final calculated grade
+    weightage: {
+      assignments: { type: Number, default: 0.6 }, // Weightage for assignments
+      quizzes: { type: Number, default: 0.4 }, // Weightage for quizzes
+    },
+    status: {
+      type: String,
+      enum: ["in progress", "completed"],
+      default: "in progress",
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Report", reportSchema);
+export default mongoose.model("Report", reportSchema);
