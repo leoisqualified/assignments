@@ -13,6 +13,7 @@ connectDB(); //connect to database
 
 // Middleware
 app.use(express.json());
+app.use("/uploads", express.static("/uploads"));
 
 // Routes
 app.use("/api/classrooms", classroomRoutes);
