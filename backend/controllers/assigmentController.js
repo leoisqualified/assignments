@@ -30,10 +30,10 @@ export const getClassroomAssignments = async (req, res) => {
   }
 };
 
-// Submit an assignment
+// Submit assignment (for students)
 export const submitAssignment = async (req, res) => {
   const { assignmentId } = req.params;
-  const { studentId, fileUrl } = req.body;
+  const { studentId } = req.body;
 
   try {
     const assignment = await Assignment.findById(assignmentId);
@@ -41,20 +41,16 @@ export const submitAssignment = async (req, res) => {
       return res.status(404).json({ message: "Assignment not found" });
     }
 
-    // Check if the student has already submitted
-    const existingSubmission = assignment.submissions.find(
-      (submission) => submission.studentId.toString() === studentId
-    );
-
-    if (existingSubmission) {
-      return res
-        .status(400)
-        .json({ message: "You have already submitted this assignment" });
-    }
-
-    assignment.submissions.push({ studentId, fileUrl });
+    // Save the student's submission
+    assignment.submissions.push({
+      studentId,
+      fileUrl: `/uploads/${req.file.filename}`,
+    });
     await assignment.save();
-    res.status(200).json({ message: "Assignment submitted successfully" });
+
+    res
+      .status(200)
+      .json({ message: "Assignment submitted successfully", assignment });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -82,6 +78,45 @@ export const gradeSubmission = async (req, res) => {
     submission.grade = grade; // Update the grade
     await assignment.save();
     res.status(200).json({ message: "Grade updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Upload assignment file (for teachers)
+export const uploadAssignmentFile = async (req, res) => {
+  const { assignmentId } = req.params;
+
+  try {
+    const assignment = await Assignment.findById(assignmentId);
+    if (!assignment) {
+      return res.status(404).json({ message: "Assignment not found" });
+    }
+
+    // Save the uploaded file's URL to the assignment
+    assignment.fileUrl = `/uploads/${req.file.filename}`;
+    await assignment.save();
+
+    res.status(200).json({ message: "File uploaded successfully", assignment });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get all submissions for an assignment (for teachers)
+export const getSubmissions = async (req, res) => {
+  const { assignmentId } = req.params;
+
+  try {
+    const assignment = await Assignment.findById(assignmentId).populate(
+      "submissions.studentId",
+      "name email"
+    );
+    if (!assignment) {
+      return res.status(404).json({ message: "Assignment not found" });
+    }
+
+    res.status(200).json(assignment.submissions);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
