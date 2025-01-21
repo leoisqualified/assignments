@@ -1,5 +1,15 @@
 import express from "express";
-import classroomController from "../controllers/classroomController";
-import { Router as router } from "express";
+import {
+  createClassroom,
+  getTeacherClassrooms,
+  joinClassroom,
+} from "../controllers/classroomController.js";
 
-router.post("/create", classroomController.create);
+const router = express.Router();
+
+// Define routes
+router.post("/create", createClassroom);
+router.get("/teacher/:teacherId", getTeacherClassrooms);
+router.post("/:classroomId/join", joinClassroom);
+
+export default router;
