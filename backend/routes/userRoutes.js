@@ -7,7 +7,7 @@ import {
 } from "../controllers/userController.js";
 import { protect, roleCheck } from "../middlewares/authMiddleware.js";
 
-const router = express.Router(); // Fixed typo: Changed express.router() to express.Router()
+const router = express.Router();
 
 // Register a user (Open to all, no authentication required)
 router.post("/register", registerUser);
