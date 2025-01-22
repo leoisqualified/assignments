@@ -1,4 +1,5 @@
 import express from "express";
+import { protect, roleCheck } from "../middlewares/authMiddleware.js";
 import {
   createClassroom,
   getTeacherClassrooms,
@@ -8,8 +9,13 @@ import {
 const router = express.Router();
 
 // Define routes
-router.post("/create", createClassroom);
-router.get("/teacher/:teacherId", getTeacherClassrooms);
-router.post("/:classroomId/join", joinClassroom);
+router.post("/create", protect, roleCheck("teacher"), createClassroom);
+router.get(
+  "/teacher/:teacherId",
+  protect,
+  roleCheck("teacher"),
+  getTeacherClassrooms
+);
+router.post("/:classroomId/join", protect, roleCheck("student"), joinClassroom);
 
 export default router;
