@@ -15,7 +15,7 @@ export const createUser = async (req, res) => {
 
   // Validate input
   if (!name || !email || !password || !role) {
-    throw "All fields are required";
+    throw new Error("All fields are required");
   }
 
   // Check if user already exists
@@ -25,7 +25,7 @@ export const createUser = async (req, res) => {
   }
 
   // Hash password
-  const salt = await bcrypt.genSalt(12);
+  const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
   // Create new user
