@@ -1,4 +1,5 @@
 import Quiz from "../models/quiz.js";
+import Grade from "../models/grade.js"; // Assuming you use this for grades
 
 // Create a new quiz (teacher only)
 export const createQuiz = async (req, res) => {
@@ -52,5 +53,39 @@ export const submitQuiz = async (req, res) => {
   res.status(200).json({
     message: "Quiz submitted successfully",
     score,
+  });
+};
+
+// Get details of a specific quiz
+export const getQuizDetails = async (req, res) => {
+  const { id } = req.params; // Quiz ID from the URL params
+
+  const quiz = await Quiz.findById(id)
+    .populate("classroom", "name") // Populate classroom details
+    .populate("questions"); // Optionally populate question details if stored in another schema
+
+  if (!quiz) {
+    throw new Error("Quiz not found");
+  }
+
+  res.status(200).json({
+    message: "Quiz details fetched successfully",
+    quiz,
+  });
+};
+
+// Get all quizzes for a specific classroom
+export const getClassroomQuizzes = async (req, res) => {
+  const { classroomId } = req.params;
+
+  const quizzes = await Quiz.find({ classroom: classroomId });
+
+  if (!quizzes || quizzes.length === 0) {
+    throw new Error("No quizzes found for this classroom");
+  }
+
+  res.status(200).json({
+    message: "Classroom quizzes fetched successfully",
+    quizzes,
   });
 };

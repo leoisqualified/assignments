@@ -23,11 +23,11 @@ connectDB();
 app.use(express.json());
 
 // Routes
-app.use("/api/assignments/users", userRoutes);
-app.use("/api/assignments/classrooms", classroomRoutes);
-app.use("/api/assignments/quizzes", quizRoutes);
-app.use("/api/assignments/grades", gradesRoutes);
-app.use("/api/assignments/materials", materialRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/classrooms", classroomRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.use("/api/grades", gradesRoutes);
+app.use("/api/materials", materialRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

@@ -40,3 +40,36 @@ export const joinClassroom = async (req, res) => {
     classroom,
   });
 };
+
+// Get details of a specific classroom
+export const getClassroomDetails = async (req, res) => {
+  const { id } = req.params; // Classroom ID from the URL params
+
+  const classroom = await Classroom.findById(id)
+    .populate("teacher", "name email") // Populate teacher details (e.g., name, email)
+    .populate("students", "name email"); // Populate student details (e.g., name, email)
+
+  if (!classroom) {
+    throw new Error("Classroom not found");
+  }
+
+  res.status(200).json({
+    message: "Classroom details fetched successfully",
+    classroom,
+  });
+};
+
+// Get all classrooms (teacher or student)
+export const getAllClassrooms = async (req, res) => {
+  const userId = req.user.userId;
+
+  // Find classrooms where the user is a teacher or student
+  const classrooms = await Classroom.find({
+    $or: [{ teacher: userId }, { students: userId }],
+  }).populate("teacher", "name email"); // Populate teacher details for all classrooms
+
+  res.status(200).json({
+    message: "Classrooms fetched successfully",
+    classrooms,
+  });
+};

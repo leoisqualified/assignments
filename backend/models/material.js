@@ -1,36 +1,33 @@
-import Material from "../models/material.js";
+import mongoose from "mongoose";
 
-// Upload a new material (teacher only)
-export const uploadMaterial = async (req, res) => {
-  const { classroomId, fileUrl, title, description } = req.body;
-  const uploadedBy = req.user.userId; // Extracted from JWT token
-  const userRole = req.user.role; // Extracted from JWT token
+const materialSchema = new mongoose.Schema(
+  {
+    classroom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Classroom",
+      required: true,
+    },
+    fileUrl: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      default: "",
+    },
+    uploadedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
-  // Check if the user is a teacher
-  if (userRole !== "teacher") {
-    throw new Error("Unauthorised Request");
-  }
+const Material = mongoose.model("Material", materialSchema);
 
-  // Validate input
-  if (!classroomId || !fileUrl || !title) {
-    throw new Error("Classroom ID, file URL, and title are required");
-  }
-
-  // Create new material
-  const newMaterial = new Material({
-    classroom: classroomId,
-    fileUrl,
-    title,
-    description,
-    uploadedBy,
-  });
-
-  // Save material to database
-  await newMaterial.save();
-
-  // Respond with success message and material details
-  res.status(201).json({
-    message: "Material uploaded successfully",
-    material: newMaterial,
-  });
-};
+export default Material;
