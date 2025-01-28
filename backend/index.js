@@ -1,28 +1,30 @@
 import express from "express";
-import connectDB from "./config/db";
-import classroomRoutes from "./routes/classroomRoutes";
-import assignmentRoutes from "./routes/assignmentRoutes";
-import quizRoutes from "./routes/quizRoutes";
-import reportRoutes from "./routes/reportRoutes";
-import userRoutes from "./routes/userRoutes";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import errorHandler from "./middlewares/errorHandler.js";
+import userRoutes from "./routes/userRoutes.js";
 
+// Initialize express app
 const app = express();
-const port = 3000;
 
-connectDB(); //connect to database
+// Load environment variables
+dotenv.config();
 
-// Middleware
+const PORT = process.env.PORT || 5000;
+
+// Connect to the database
+connectDB();
+
+// Middleware to parse JSON
 app.use(express.json());
-app.use("/uploads", express.static("/uploads"));
 
 // Routes
-app.use("/api/classrooms", classroomRoutes);
-app.use("/api/assigments", assignmentRoutes);
-app.use("/api/quiz", quizRoutes);
-app.use("/api/reports", reportRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/assignments", userRoutes);
 
-// Start server
-app.listen(port, () => {
-  console.log(`listening on port ${port}`);
+// Error handling middleware
+app.use(errorHandler);
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
