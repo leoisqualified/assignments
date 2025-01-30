@@ -7,6 +7,7 @@ import classroomRoutes from "./routes/classroomRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import gradesRoutes from "./routes/gradesRoutes.js";
 import materialRoutes from "./routes/materialRoutes.js";
+import assignmentRoutes from "./routes/assignmentRoutes.js";
 
 // Initialize express app
 const app = express();
@@ -23,11 +24,12 @@ connectDB();
 app.use(express.json());
 
 // Routes
-app.use("/api/assignments/users", userRoutes);
-app.use("/api/assignments/classrooms", classroomRoutes);
-app.use("/api/assignments/quizzes", quizRoutes);
-app.use("/api/assignments/grades", gradesRoutes);
-app.use("/api/assignments/materials", materialRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/classrooms", classroomRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.use("/api/grades", gradesRoutes);
+app.use("/api/materials", materialRoutes);
+app.use("/api/assignments", assignmentRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

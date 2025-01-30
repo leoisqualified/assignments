@@ -9,11 +9,8 @@ import { protect } from "../middlewares/auth.js";
 
 const classroomRoutes = express.Router();
 
-// PUBLIC ROUTES (if any)
-// Example: Fetch public classrooms (if needed)
-// classroomRoutes.get("/public", getPublicClassrooms);
-
-// PROTECTED ROUTES
+// PROTECTED ROUTES...
+classroomRoutes.use(protect);
 // Create a new classroom (teacher only)
 classroomRoutes.post("/create", protect, createClassroom);
 

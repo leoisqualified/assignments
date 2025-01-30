@@ -1,4 +1,6 @@
 import User from "../models/user.js";
+import Submission from "../models/submission.js";
+import Assignment from "../models/assignment.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

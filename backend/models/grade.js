@@ -6,10 +6,21 @@ const gradeSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  quiz: { type: mongoose.Schema.Types.ObjectId, ref: "Quiz", required: true },
-  score: { type: Number, required: true },
+  assignment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Assignment",
+    required: true,
+  },
+  scores: {
+    correctness: { type: Number, required: true },
+    efficiency: { type: Number },
+    readability: { type: Number },
+  },
+  feedback: { type: String, required: true },
+  aiGraded: { type: Boolean, default: false }, // To track AI-graded submissions
+  createdAt: { type: Date, default: Date.now },
 });
 
-const grade = mongoose.model("Grade", gradeSchema);
+const Grade = mongoose.model("Grade", gradeSchema);
 
-export default grade;
+export default Grade;

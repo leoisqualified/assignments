@@ -14,7 +14,9 @@ userRoutes.post("/register", createUser);
 // login a user
 userRoutes.post("/login", loginUser);
 
+userRoutes.use(protect);
+
 // PROTECTED ROUTES...
-userRoutes.get("/profile", protect, getUser); // get a users profile
+userRoutes.get("/profile", getUser); // get a users profile
 
 export default userRoutes;

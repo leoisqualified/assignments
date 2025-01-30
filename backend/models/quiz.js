@@ -16,6 +16,6 @@ const quizSchema = new mongoose.Schema({
   ],
 });
 
-const classroom = mongoose.model("Quiz", quizSchema);
+const Quiz = mongoose.model("Quiz", quizSchema);
 
-export default classroom;
+export default Quiz;
