@@ -10,14 +10,14 @@ import Register from "./pages/Register";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import Classroom from "./pages/Classroom";
-import Navbar from "./components/Navbar";
+import CreateClassroom from "./pages/CreateClassroom";
+import JoinClassroom from "./pages/JoinClassroom";
 
 const App = () => {
   const { user } = useSelector((state) => state.auth);
 
   return (
     <Router>
-      <Navbar />
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
@@ -47,6 +47,26 @@ const App = () => {
         <Route
           path="/classroom/:id"
           element={user ? <Classroom /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/create-classroom"
+          element={
+            user?.role === "teacher" ? (
+              <CreateClassroom />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/join-classroom"
+          element={
+            user?.role === "student" ? (
+              <JoinClassroom />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
       </Routes>
     </Router>
