@@ -12,15 +12,15 @@ const classroomRoutes = express.Router();
 // PROTECTED ROUTES...
 classroomRoutes.use(protect);
 // Create a new classroom (teacher only)
-classroomRoutes.post("/create", protect, createClassroom);
+classroomRoutes.post("/create", createClassroom);
 
 // Join a classroom (student only)
-classroomRoutes.post("/join", protect, joinClassroom);
+classroomRoutes.post("/join", joinClassroom);
 
 // Get details of a specific classroom
-classroomRoutes.get("/:id", protect, getClassroomDetails);
+classroomRoutes.get("/:id", getClassroomDetails);
 
 // Get all classrooms for the logged-in user (teacher or student)
-classroomRoutes.get("/", protect, getAllClassrooms);
+classroomRoutes.get("/", getAllClassrooms);
 
 export default classroomRoutes;

@@ -2,43 +2,60 @@ import Classroom from "../models/classroom.js";
 
 // Create a new classroom (teacher only)
 export const createClassroom = async (req, res) => {
-  const { name } = req.body;
-  const teacherId = req.user.userId;
+  try {
+    const { name } = req.body;
+    const teacherId = req.user.userId;
 
-  if (!name) {
-    throw new Error("Classroom name is required");
+    if (!name) {
+      return res.status(400).json({ error: "Classroom name is required" });
+    }
+
+    const newClassroom = new Classroom({
+      name,
+      teacher: teacherId,
+      students: [],
+    });
+
+    await newClassroom.save();
+
+    res.status(201).json({
+      message: "Classroom created successfully",
+      classroom: newClassroom,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create classroom" });
   }
-
-  const newClassroom = new Classroom({
-    name,
-    teacher: teacherId,
-  });
-
-  await newClassroom.save();
-
-  res.status(201).json({
-    message: "Classroom created successfully",
-    classroom: newClassroom,
-  });
 };
 
 // Join a classroom (student only)
 export const joinClassroom = async (req, res) => {
-  const { classId } = req.body;
-  const studentId = req.user.userId;
+  const { classroomId } = req.body;
+  const studentId = req.user.userId; // Get the logged-in student ID
 
-  const classroom = await Classroom.findById(classId);
-  if (!classroom) {
-    throw new Error("Classroom not found");
+  try {
+    const classroom = await Classroom.findById(classroomId);
+    if (!classroom) {
+      return res.status(404).json({ error: "Classroom not found" });
+    }
+
+    // Check if the student is already in the classroom
+    if (classroom.students.includes(studentId)) {
+      return res
+        .status(400)
+        .json({ error: "You have already joined this classroom" });
+    }
+
+    // Add the student to the classroom
+    classroom.students.push(studentId);
+    await classroom.save();
+
+    res.status(200).json({
+      message: "Joined classroom successfully",
+      classroom,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to join classroom" });
   }
-
-  classroom.students.push(studentId);
-  await classroom.save();
-
-  res.status(200).json({
-    message: "Joined classroom successfully",
-    classroom,
-  });
 };
 
 // Get details of a specific classroom

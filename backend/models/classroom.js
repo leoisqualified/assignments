@@ -7,13 +7,14 @@ const classroomSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
-  students: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
+  students: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ], // Changed to an array to store multiple students
 });
 
-const classroom = mongoose.model("Classroom", classroomSchema);
+const Classroom = mongoose.model("Classroom", classroomSchema);
 
-export default classroom;
+export default Classroom;
