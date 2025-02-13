@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
+import "../assets/login.css"; // Ensure this file is imported for styles
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,19 +21,16 @@ const Login = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="p-6 bg-white shadow-lg rounded-lg w-96"
-      >
-        <h2 className="text-xl font-bold mb-4">Login</h2>
-        {error && <p className="text-red-500">{error}</p>}
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h2 className="title">Login</h2>
+        {error && <p className="error-message">{error}</p>}
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border mb-2"
+          className="input-field"
           required
         />
         <input
@@ -40,16 +38,20 @@ const Login = () => {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border mb-2"
+          className="input-field"
           required
         />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
-          disabled={loading}
-        >
+        <button type="submit" className="submit-button" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
+
+        {/* Register Link (Fixed) */}
+        <p className="register-link">
+          Don't have an account?{" "}
+          <span onClick={() => navigate("/register")} className="link">
+            Register here
+          </span>
+        </p>
       </form>
     </div>
   );

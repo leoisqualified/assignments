@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
+import "../assets/register.css"; // Ensure this file is imported for styles
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -22,19 +23,16 @@ const Register = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="p-6 bg-white shadow-lg rounded-lg w-96"
-      >
-        <h2 className="text-xl font-bold mb-4">Register</h2>
-        {error && <p className="text-red-500">{error}</p>}
+    <div className="register-container">
+      <form onSubmit={handleSubmit} className="register-form">
+        <h2 className="title">Register</h2>
+        {error && <p className="error-message">{error}</p>}
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 border mb-2"
+          className="input-field"
           required
         />
         <input
@@ -42,7 +40,7 @@ const Register = () => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border mb-2"
+          className="input-field"
           required
         />
         <input
@@ -50,24 +48,28 @@ const Register = () => {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border mb-2"
+          className="input-field"
           required
         />
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className="w-full p-2 border mb-2"
+          className="input-field"
         >
           <option value="student">Student</option>
           <option value="teacher">Teacher</option>
         </select>
-        <button
-          type="submit"
-          className="w-full bg-green-500 text-white p-2 rounded"
-          disabled={loading}
-        >
+        <button type="submit" className="submit-button" disabled={loading}>
           {loading ? "Registering..." : "Register"}
         </button>
+
+        {/* Login Link (Added) */}
+        <p className="login-link">
+          Already have an account?{" "}
+          <span onClick={() => navigate("/login")} className="link">
+            Login here
+          </span>
+        </p>
       </form>
     </div>
   );

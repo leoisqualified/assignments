@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { joinClassroom } from "../redux/classroomSlice";
-import "./JoinClassroom.css";
+import "../assets/JoinClassroom.css";
 
 const JoinClassroom = () => {
   const [classroomId, setClassroomId] = useState("");
